@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Organiza Aí | Rotina</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div th:replace="~{fragments :: menu}"></div>
+<main class="container">
+  <section class="page-heading"><span class="eyebrow">PLANEJAMENTO</span><h1>Minha rotina de estudos</h1><p>Escolha o dia, organize as matérias e acompanhe cada tarefa.</p></section>
+  <div class="routine-layout">
+    <section class="panel calendar-panel">
+      <div class="panel-title"><div><span class="eyebrow">CALENDÁRIO</span><h2>Escolha uma data</h2></div></div>
+      <form method="get" th:action="@{/rotina}" class="date-form"><input type="date" name="data" th:value="${dataSelecionada}"><button class="btn primary" type="submit">Ver dia</button></form>
+      <div class="selected-date"><span class="calendar-symbol">▦</span><div><small>PLANEJAMENTO DO DIA</small><strong th:text="${#temporals.format(dataSelecionada, 'EEEE, dd ''de'' MMMM')}">Data selecionada</strong></div></div>
+      <form method="post" th:action="@{/rotina/salvar}" class="activity-form">
+        <h3>Adicionar atividade</h3>
+        <label>Matéria<input name="materia" placeholder="Ex.: Matemática" required></label>
+        <label>O que você vai estudar?<input name="descricao" placeholder="Ex.: Revisar funções"></label>
+        <div class="form-row"><label>Data<input type="date" name="data" th:value="${dataSelecionada}" required></label><label>Horário<input type="time" name="horario" value="14:00" required></label></div>
+        <button class="btn primary full" type="submit">＋ Adicionar ao calendário</button>
+      </form>
+    </section>
+    <section class="panel tasks-panel">
+      <div class="panel-title"><div><span class="eyebrow">SEU CRONOGRAMA</span><h2>Atividades do dia</h2></div><span class="soft-tag" th:text="${#lists.size(atividades)} + ' tarefas'">0 tarefas</span></div>
+      <p class="notice success" th:if="${sucesso}" th:text="${sucesso}"></p><p class="notice error" th:if="${erro}" th:text="${erro}"></p>
+      <div th:if="${#lists.isEmpty(atividades)}" class="empty large"><span>☼</span><strong>Nenhuma atividade por aqui</strong><p>Adicione uma matéria e monte seu cronograma de estudos para este dia.</p></div>
+      <div class="task-list" th:each="item : ${atividades}">
+        <div class="task-time" th:text="${#temporals.format(item.horario, 'HH:mm')}">14:00</div>
+        <div class="task-content" th:classappend="${item.concluida} ? ' done' : ''"><strong th:text="${item.materia}">Matéria</strong><span th:text="${item.descricao}">Descrição</span><small th:if="${item.concluida}">Concluída</small></div>
+        <form th:action="@{/rotina/{id}/concluir(id=${item.id})}" method="post"><input type="hidden" name="data" th:value="${dataSelecionada}"><button class="round-btn" type="submit" th:title="${item.concluida} ? 'Desmarcar' : 'Marcar como concluída'" th:text="${item.concluida} ? '✓' : '○'">○</button></form>
+        <form th:action="@{/rotina/{id}/excluir(id=${item.id})}" method="post"><input type="hidden" name="data" th:value="${dataSelecionada}"><button class="delete-btn" type="submit" title="Excluir atividade">×</button></form>
+      </div>
+    </section>
+  </div>
+</main><footer>Organiza Aí · um plano possível é melhor que um plano perfeito.</footer>
+</body></html>

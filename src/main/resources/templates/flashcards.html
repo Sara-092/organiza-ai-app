@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Organiza Aí | Flashcards</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: menu}"></div>
+<main class="container">
+  <section class="page-heading">
+    <span class="eyebrow">REVISÃO</span>
+    <h1>Meus flashcards</h1>
+    <p>Cadastre uma pergunta e sua resposta para consultar quando quiser.</p>
+  </section>
+
+  <section class="panel" style="max-width:760px;margin:28px auto;padding:28px">
+    <h2>Novo flashcard</h2>
+    <p class="notice success" th:if="${sucessoFlashcard}" th:text="${sucessoFlashcard}"></p>
+    <p class="notice error" th:if="${erroFlashcard}" th:text="${erroFlashcard}"></p>
+    <form method="post" th:action="@{/flashcards/salvar}" style="display:grid;gap:12px;margin-top:18px">
+      <label for="pergunta">Pergunta</label>
+      <input id="pergunta" name="pergunta" type="text" maxlength="180" placeholder="Digite a pergunta" required>
+      <label for="resposta">Resposta</label>
+      <textarea id="resposta" name="resposta" rows="3" maxlength="1000" placeholder="Digite a resposta" required></textarea>
+      <button type="submit" class="btn primary">Salvar</button>
+    </form>
+  </section>
+
+  <section style="max-width:760px;margin:28px auto">
+    <div class="panel-title"><h2>Flashcards cadastrados</h2><span class="soft-tag" th:text="${#lists.size(flashcards)} + ' cartões'">0 cartões</span></div>
+    <p class="panel empty" th:if="${#lists.isEmpty(flashcards)}">Nenhum flashcard cadastrado ainda.</p>
+    <article class="panel" th:each="card : ${flashcards}" style="margin-top:14px;padding:20px">
+      <p><strong>Pergunta:</strong> <span th:text="${card.pergunta}">Pergunta</span></p>
+      <p style="margin-top:10px"><strong>Resposta:</strong> <span th:text="${card.resposta}">Resposta</span></p>
+      <form method="post" th:action="@{/flashcards/{id}/excluir(id=${card.id})}" style="margin-top:12px">
+        <button type="submit" class="btn secondary">Excluir</button>
+      </form>
+    </article>
+  </section>
+</main>
+<footer>Organiza Aí · revise no seu ritmo.</footer>
+</body>
+</html>
