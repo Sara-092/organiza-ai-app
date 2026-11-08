@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Organiza Aí | Flashcards</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: menu}"></div>
+<main class="container">
+  <section class="page-heading">
+    <span class="eyebrow">FLASHCARDS</span>
+    <h1>Acessar flashcard</h1>
+    <p>Use um site de flashcards online para os estudos.</p>
+  </section>
+  <section class="panel" style="max-width:680px;margin:32px auto;text-align:center;padding:40px 28px">
+    <span class="eyebrow">FLASHCARDS ONLINE</span>
+    <h2 style="margin:12px 0">Pronto para começar?</h2>
+    <p class="muted" style="margin-bottom:24px">Clique no botão abaixo para abrir um site gratuito em outra página.</p>
+    <a class="btn primary" href="https://flashcards.world/" target="_blank" rel="noopener noreferrer">Abrir</a>
+  </section>
+</main>
+</body>
+</html>

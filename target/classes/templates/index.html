@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Organiza Aí | Início</title><link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: menu}"></div>
+<main class="container">
+  <section class="hero">
+    <div><span class="eyebrow">SEU ESPAÇO DE ESTUDOS</span>
+      <h1>Estude com calma.<br><em>Organize suas ideias.</em></h1>
+      <p>Planeje sua rotina, acompanhe suas tarefas e respeite seu tempo.</p>
+      <div class="hero-actions"><a class="btn primary" th:href="@{/rotina}">Organizar minha rotina</a><a class="btn secondary" th:href="@{/tempo}">Começar a estudar</a></div>
+    </div>
+  </section>
+  <section class="section-head"><div><span class="eyebrow">VISÃO GERAL</span><h2>Seu cantinho de organização</h2></div></section>
+  <section class="summary-grid">
+    <article class="summary-card"><span class="summary-icon">▦</span><div><strong th:text="${totalAtividades}">0</strong><span>atividades planejadas</span></div></article>
+    <article class="summary-card"><span class="summary-icon">✓</span><div><strong th:text="${concluidas}">0</strong><span>atividades concluídas</span></div></article>
+  </section>
+  <section class="two-col">
+    <article class="panel"><div class="panel-title"><div><span class="eyebrow">PRÓXIMOS PASSOS</span><h2>O que vem por aí</h2></div><a th:href="@{/rotina}">Ver calendário →</a></div>
+      <div th:if="${#lists.isEmpty(proximas)}" class="empty">Seu calendário está livre por enquanto. Que tal planejar a primeira atividade?</div>
+      <div class="upcoming" th:each="item : ${proximas}"><span class="date-chip" th:text="${#temporals.format(item.data, 'dd/MM')}">07/11</span><div><strong th:text="${item.materia}">Matéria</strong><small th:text="${item.descricao}">Atividade</small></div><span class="time" th:text="${#temporals.format(item.horario, 'HH:mm')}">14:00</span></div>
+    </article>
+    <article class="quote-panel"><span class="eyebrow">LEMBRETE GENTIL</span><div class="quote-mark">“</div><h2>Constância vale mais que pressa.</h2><p>Pequenos períodos de dedicação também constroem grandes resultados.</p><a th:href="@{/tempo}" class="text-link">Abrir cronômetro →</a></article>
+  </section>
+</main>
+</body></html>

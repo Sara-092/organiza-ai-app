@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header class="topbar" th:fragment="menu">
+  <a class="brand" th:href="@{/}"><span class="brand-mark">Or</span> Organiza aí</a>
+  <nav>
+    <a th:href="@{/}" th:classappend="${pagina == 'inicio'} ? ' ativo' : ''">Início</a>
+    <a th:href="@{/rotina}" th:classappend="${pagina == 'rotina'} ? ' ativo' : ''">Rotina</a>
+    <a th:href="@{/flashcards}" th:classappend="${pagina == 'flashcards'} ? ' ativo' : ''">Flashcards</a>
+    <a th:href="@{/tempo}" th:classappend="${pagina == 'tempo'} ? ' ativo' : ''">Gerenciar tempo</a>
+  </nav>
+</header>
+</body>
+</html>
