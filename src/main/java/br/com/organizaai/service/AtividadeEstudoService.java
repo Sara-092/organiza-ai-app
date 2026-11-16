@@ -1,6 +1,6 @@
 package br.com.organizaai.service;
 
-import br.com.organizaai.model.AtividadeEstudo;
+import br.com.organizaai.model.AtividadeEstudoModel;
 import br.com.organizaai.repository.AtividadeEstudoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,12 +17,12 @@ public class AtividadeEstudoService {
     }
 
     @Transactional(readOnly = true)
-    public List<AtividadeEstudo> listarPorData(LocalDate data) {
+    public List<AtividadeEstudoModel> listarPorData(LocalDate data) {
         return repository.findByDataOrderByHorarioAsc(data);
     }
 
     @Transactional(readOnly = true)
-    public List<AtividadeEstudo> listarProximas() {
+    public List<AtividadeEstudoModel> listarProximas() {
         return repository.findAllByOrderByDataAscHorarioAsc().stream()
                 .filter(a -> a.getData() != null && !a.getData().isBefore(LocalDate.now()))
                 .limit(4).toList();
@@ -35,7 +35,7 @@ public class AtividadeEstudoService {
     public long contarConcluidas() { return repository.countByConcluidaTrue(); }
 
     @Transactional
-    public AtividadeEstudo salvar(AtividadeEstudo atividade) {
+    public AtividadeEstudoModel salvar(AtividadeEstudoModel atividade) {
         if (atividade.getMateria() == null || atividade.getMateria().isBlank()
                 || atividade.getData() == null || atividade.getHorario() == null) {
             throw new IllegalArgumentException("Preencha a matéria, a data e o horário.");
@@ -46,7 +46,7 @@ public class AtividadeEstudoService {
 
     @Transactional
     public void alternarConclusao(Long id) {
-        AtividadeEstudo atividade = repository.findById(id)
+        AtividadeEstudoModel atividade = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Atividade não encontrada."));
         atividade.setConcluida(!atividade.isConcluida());
         repository.save(atividade);

@@ -11,20 +11,23 @@
     <div><span class="eyebrow">SEU ESPAÇO DE ESTUDOS</span>
       <h1>Estude com calma.<br><em>Organize suas ideias.</em></h1>
       <p>Planeje sua rotina, acompanhe suas tarefas e respeite seu tempo.</p>
-      <div class="hero-actions"><a class="btn primary" th:href="@{/rotina}">Organizar minha rotina</a><a class="btn secondary" th:href="@{/tempo}">Começar a estudar</a></div>
+      <div class="hero-actions"><a class="btn primary" th:href="@{/rotina}">Organizar minha rotina</a><a class="btn secondary" href="https://pomodorotimer.online/pt" target="_blank" rel="noopener noreferrer">Começar a estudar</a></div>
     </div>
-  </section>
-  <section class="section-head"><div><span class="eyebrow">VISÃO GERAL</span><h2>Seu cantinho de organização</h2></div></section>
+<div class="hero-art"><div class="note-simple">um passo de cada vez</div></div>  </section>
+  <section class="section-head"><div><span class="eyebrow">VISÃO GERAL</span><h2>Seu cantinho de organização</h2></div><span class="soft-tag">feito no seu ritmo</span></section>
   <section class="summary-grid">
     <article class="summary-card"><span class="summary-icon">▦</span><div><strong th:text="${totalAtividades}">0</strong><span>atividades planejadas</span></div></article>
     <article class="summary-card"><span class="summary-icon">✓</span><div><strong th:text="${concluidas}">0</strong><span>atividades concluídas</span></div></article>
+    <article class="summary-card"><span class="summary-icon">▤</span><div><strong th:text="${totalFlashcards}">0</strong><span>flashcards criados</span></div></article>
   </section>
   <section class="two-col">
     <article class="panel"><div class="panel-title"><div><span class="eyebrow">PRÓXIMOS PASSOS</span><h2>O que vem por aí</h2></div><a th:href="@{/rotina}">Ver calendário →</a></div>
       <div th:if="${#lists.isEmpty(proximas)}" class="empty">Seu calendário está livre por enquanto. Que tal planejar a primeira atividade?</div>
       <div class="upcoming" th:each="item : ${proximas}"><span class="date-chip" th:text="${#temporals.format(item.data, 'dd/MM')}">07/11</span><div><strong th:text="${item.materia}">Matéria</strong><small th:text="${item.descricao}">Atividade</small></div><span class="time" th:text="${#temporals.format(item.horario, 'HH:mm')}">14:00</span></div>
     </article>
-    <article class="quote-panel"><span class="eyebrow">LEMBRETE GENTIL</span><div class="quote-mark">“</div><h2>Constância vale mais que pressa.</h2><p>Pequenos períodos de dedicação também constroem grandes resultados.</p><a th:href="@{/tempo}" class="text-link">Abrir cronômetro →</a></article>
+    <article class="quote-panel"><span class="eyebrow">LEMBRETE GENTIL</span><div class="quote-mark">“</div><h2>Constância vale mais que pressa.</h2><p>Pequenos períodos de dedicação também constroem grandes resultados.</p><a href="https://pomodorotimer.online/pt" target="_blank" rel="noopener noreferrer" class="text-link">Abrir cronômetro →</a></article>
   </section>
+  <section class="flashcard-callout"><div><span class="eyebrow">REVISÃO PERSONALIZADA</span><h2>Crie seus próprios flashcards</h2><p>Escreva uma pergunta, cadastre a resposta e deixe tudo salvo para revisar depois.</p></div><a class="btn primary" th:href="@{/flashcards}">Criar flashcards →</a></section>
 </main>
+
 </body></html>

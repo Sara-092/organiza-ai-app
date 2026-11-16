@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-public class AtividadeEstudo {
+public class AtividadeEstudoModel {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String materia;
@@ -26,3 +26,4 @@ public class AtividadeEstudo {
     public boolean isConcluida() { return concluida; }
     public void setConcluida(boolean concluida) { this.concluida = concluida; }
 }
+ 

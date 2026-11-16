@@ -1,24 +1,84 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Organiza Aí | Flashcards</title>
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 <div th:replace="~{fragments :: menu}"></div>
+
 <main class="container">
   <section class="page-heading">
-    <span class="eyebrow">FLASHCARDS</span>
-    <h1>Acessar flashcard</h1>
-    <p>Use um site de flashcards online para os estudos.</p>
+    <span class="eyebrow">REVISÃO</span>
+    <h1>Meus flashcards</h1>
+    <p>Cadastre uma pergunta e sua resposta. Depois, é só abrir o cartão para conferir.</p>
   </section>
-  <section class="panel" style="max-width:680px;margin:32px auto;text-align:center;padding:40px 28px">
-    <span class="eyebrow">FLASHCARDS ONLINE</span>
-    <h2 style="margin:12px 0">Pronto para começar?</h2>
-    <p class="muted" style="margin-bottom:24px">Clique no botão abaixo para abrir um site gratuito em outra página.</p>
-    <a class="btn primary" href="https://flashcards.world/" target="_blank" rel="noopener noreferrer">Abrir</a>
-  </section>
+
+  <div class="flashcard-layout">
+
+    <!-- Formulário -->
+    <section class="panel flashcard-form-panel">
+      <span class="eyebrow">NOVO CARTÃO</span>
+      <h2>Novo flashcard</h2>
+      <p class="form-description">Escreva a pergunta e a resposta que você quer lembrar.</p>
+
+      <p class="notice success" th:if="${sucessoFlashcard}" th:text="${sucessoFlashcard}"></p>
+      <p class="notice error" th:if="${erroFlashcard}" th:text="${erroFlashcard}"></p>
+
+      <form class="flashcard-form" method="post" th:action="@{/flashcards/salvar}">
+        <label for="pergunta">Pergunta</label>
+        <input id="pergunta" name="pergunta" type="text" maxlength="180" placeholder="Digite a pergunta" required>
+
+        <label for="resposta">Resposta</label>
+        <textarea id="resposta" name="resposta" rows="4" maxlength="1000" placeholder="Digite a resposta" required></textarea>
+
+        <button type="submit" class="btn primary full">Salvar</button>
+      </form>
+    </section>
+
+    <!-- Lista -->
+    <section class="flashcard-list-panel">
+      <div class="panel-title">
+        <h2>Flashcards cadastrados</h2>
+        <span class="soft-tag" th:text="|${#lists.size(flashcards)} cartões|">0 cartões</span>
+      </div>
+
+      <div class="panel empty-flashcards" th:if="${#lists.isEmpty(flashcards)}">
+        <span>▤</span>
+        <strong>Nenhum flashcard ainda</strong>
+        <p>Cadastre o primeiro cartão ao lado e ele aparecerá aqui.</p>
+      </div>
+
+      <article class="flashcard-item" th:each="card : ${flashcards}">
+        <div class="flashcard-top">
+          <span class="flashcard-label">PERGUNTA</span>
+          <form method="post" th:action="@{/flashcards/{id}/excluir(id=${card.id})}">
+            <button type="submit" class="delete-btn" title="Excluir flashcard" aria-label="Excluir flashcard">×</button>
+          </form>
+        </div>
+
+        <h3 th:text="${card.pergunta}">Pergunta</h3>
+
+        <div class="answer-area">
+          <span class="flashcard-label">RESPOSTA</span>
+          <p th:text="${card.resposta}">Resposta</p>
+        </div>
+
+        <button type="button" class="reveal-btn" onclick="alternarResposta(this)">Mostrar resposta</button>
+      </article>
+    </section>
+
+  </div>
 </main>
+
+<script>
+  function alternarResposta(botao) {
+    var area = botao.previousElementSibling;
+    var aberta = area.classList.toggle('answer-open');
+    botao.textContent = aberta ? 'Ocultar resposta' : 'Mostrar resposta';
+  }
+</script>
 </body>
 </html>

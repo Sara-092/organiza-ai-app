@@ -1,8 +1,9 @@
 package br.com.organizaai.controller;
-import br.com.organizaai.model.AtividadeEstudo;
+
+import br.com.organizaai.model.AtividadeEstudoModel;
+import br.com.organizaai.repository.FlashcardRepository;
 import br.com.organizaai.service.AtividadeEstudoService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -11,11 +12,13 @@ import java.time.LocalDate;
 
 @Controller
 public class PaginaController {
-    private final AtividadeEstudoService atividadeService;
 
-    public PaginaController(AtividadeEstudoService atividadeService ) {
+    private final AtividadeEstudoService atividadeService;
+    private final FlashcardRepository flashcardRepository;
+
+    public PaginaController(AtividadeEstudoService atividadeService, FlashcardRepository flashcardRepository) {
         this.atividadeService = atividadeService;
-       
+        this.flashcardRepository = flashcardRepository;
     }
 
     @GetMapping("/")
@@ -23,24 +26,21 @@ public class PaginaController {
         model.addAttribute("totalAtividades", atividadeService.contarTodas());
         model.addAttribute("concluidas", atividadeService.contarConcluidas());
         model.addAttribute("proximas", atividadeService.listarProximas());
+        model.addAttribute("totalFlashcards", flashcardRepository.count());
         return "index";
     }
-    @GetMapping("/flashcards")
-public String flashcards() {
-    return "flashcards";
-}
 
     @GetMapping("/rotina")
     public String rotina(@RequestParam(required = false) String data, Model model) {
         LocalDate selecionada = (data == null || data.isBlank()) ? LocalDate.now() : LocalDate.parse(data);
         model.addAttribute("atividades", atividadeService.listarPorData(selecionada));
         model.addAttribute("dataSelecionada", selecionada);
-        model.addAttribute("novaAtividade", new AtividadeEstudo());
+        model.addAttribute("novaAtividade", new AtividadeEstudoModel());
         return "rotina";
     }
 
     @PostMapping("/rotina/salvar")
-    public String salvarAtividade(@ModelAttribute AtividadeEstudo novaAtividade, RedirectAttributes redirect) {
+    public String salvarAtividade(@ModelAttribute AtividadeEstudoModel novaAtividade, RedirectAttributes redirect) {
         try {
             atividadeService.salvar(novaAtividade);
             redirect.addFlashAttribute("sucesso", "Atividade adicionada ao calendário!");
