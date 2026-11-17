@@ -6,8 +6,10 @@
   <nav>
     <a th:href="@{/}" th:classappend="${pagina == 'inicio'} ? ' ativo' : ''">Início</a>
     <a th:href="@{/rotina}" th:classappend="${pagina == 'rotina'} ? ' ativo' : ''">Rotina</a>
-    <a th:href="@{/flashcards}" th:classappend="${pagina == 'flashcards'} ? ' ativo' : ''">Flashcards</a>
+    <a th:href="@{/flashcards}" th:classappend="${pagina == 'flashcards'} ? ' ativo' : ''">Flashcards</a>   
+    <a th:href="@{/metas}" th:classappend="${pagina == 'metas'} ? ' ativo' : ''">Metas</a>
     <a th:href="@{/tempo}" th:classappend="${pagina == 'tempo'} ? ' ativo' : ''">Gerenciar tempo</a>
+
   </nav>
 </header>
 </body>

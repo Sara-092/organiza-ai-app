@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Organiza Aí | Metas</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+<body>
+
+<div th:replace="~{fragments :: menu}"></div>
+
+<main class="container metas-page">
+
+  <section class="page-heading">
+    <span class="eyebrow">OBJETIVOS</span>
+    <h1>Minhas metas</h1>
+    <p>Cadastre suas metas de estudo e acompanhe o progresso.</p>
+  </section>
+
+  <p th:if="${sucesso}" th:text="${sucesso}" class="meta-alert meta-alert-ok"></p>
+  <p th:if="${erro}" th:text="${erro}" class="meta-alert meta-alert-erro"></p>
+
+  <div class="meta-layout">
+
+    <section class="meta-card">
+      <span class="eyebrow" th:text="${editando} ? 'EDITANDO' : 'NOVA META'">NOVA META</span>
+      <h2 th:text="${editando} ? 'Editar meta' : 'Nova meta'">Nova meta</h2>
+      <p class="meta-hint">Escreva o que você quer alcançar e até quando.</p>
+
+      <form method="post" class="meta-form"
+            th:action="${editando} ? @{/metas/{id}(id=${meta.id})} : @{/metas}">
+
+        <label for="titulo">Título</label>
+        <input type="text" id="titulo" name="titulo" maxlength="120"
+               placeholder="Ex.: Terminar revisão de Matemática"
+               th:value="${meta.titulo}" required>
+
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" name="descricao" rows="4" maxlength="500"
+                  placeholder="Detalhes da meta"
+                  th:text="${meta.descricao}"></textarea>
+
+        <label for="dataLimite">Data limite</label>
+        <input type="date" id="dataLimite" name="dataLimite"
+               th:value="${meta.dataLimite}">
+
+        <button type="submit" class="meta-btn meta-btn-primary"
+                th:text="${editando} ? 'Salvar alterações' : 'Cadastrar meta'">Cadastrar meta</button>
+
+        <a th:if="${editando}" th:href="@{/metas}" class="meta-btn meta-btn-ghost">Cancelar</a>
+      </form>
+    </section>
+
+    <section>
+      <div class="meta-list-head">
+        <h2>Metas cadastradas</h2>
+        <div class="meta-chips">
+          <span class="meta-chip"><span th:text="${totalPendentes}">0</span> pendentes</span>
+          <span class="meta-chip"><span th:text="${totalConcluidas}">0</span> concluídas</span>
+        </div>
+      </div>
+
+      <div th:if="${#lists.isEmpty(metas)}" class="meta-empty">
+        <strong>Nenhuma meta ainda</strong>
+        <p>Cadastre a primeira meta ao lado e ela aparecerá aqui.</p>
+      </div>
+
+      <article th:each="m : ${metas}" class="meta-item" th:classappend="${m.concluida} ? 'meta-done' : ''">
+        <div class="meta-item-body">
+          <h3 th:text="${m.titulo}">Título</h3>
+
+          <p th:if="${m.descricao != null and !#strings.isEmpty(m.descricao)}"
+             th:text="${m.descricao}" class="meta-desc"></p>
+
+          <span class="meta-date" th:if="${m.dataLimite != null}">
+            Até <span th:text="${#temporals.format(m.dataLimite, 'dd/MM/yyyy')}">01/01/2026</span>
+          </span>
+        </div>
+
+        <div class="meta-actions">
+          <form method="post" th:action="@{/metas/{id}/concluir(id=${m.id})}">
+            <button type="submit" class="meta-btn meta-btn-soft"
+                    th:text="${m.concluida} ? 'Reabrir' : 'Concluir'">Concluir</button>
+          </form>
+
+          <a th:href="@{/metas/{id}/editar(id=${m.id})}" class="meta-btn meta-btn-ghost">Editar</a>
+
+          <form method="post" th:action="@{/metas/{id}/excluir(id=${m.id})}"
+                onsubmit="return confirm('Excluir esta meta?');">
+            <button type="submit" class="meta-btn meta-btn-danger">Excluir</button>
+          </form>
+        </div>
+      </article>
+    </section>
+
+  </div>
+</main>
+
+</body>
+</html>

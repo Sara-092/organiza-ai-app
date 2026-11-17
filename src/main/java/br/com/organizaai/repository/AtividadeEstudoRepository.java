@@ -9,4 +9,6 @@ public interface AtividadeEstudoRepository extends JpaRepository<AtividadeEstudo
     List<AtividadeEstudoModel> findAllByOrderByDataAscHorarioAsc();
     List<AtividadeEstudoModel> findByDataOrderByHorarioAsc(LocalDate data);
     long countByConcluidaTrue();
+    long countByConcluida(boolean concluida);
+List<AtividadeEstudoModel> findTop5ByDataGreaterThanEqualOrderByDataAscHorarioAsc(LocalDate data);
 }

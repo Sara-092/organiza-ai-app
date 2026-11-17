@@ -3,6 +3,7 @@ package br.com.organizaai.controller;
 import br.com.organizaai.model.AtividadeEstudoModel;
 import br.com.organizaai.repository.FlashcardRepository;
 import br.com.organizaai.service.AtividadeEstudoService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,9 @@ public class PaginaController {
     }
 
     @GetMapping("/")
-    public String inicio(Model model) {
+    public String inicio(Model model, HttpServletResponse response) {
+        semCache(response);
+        model.addAttribute("pagina", "inicio");
         model.addAttribute("totalAtividades", atividadeService.contarTodas());
         model.addAttribute("concluidas", atividadeService.contarConcluidas());
         model.addAttribute("proximas", atividadeService.listarProximas());
@@ -31,8 +34,10 @@ public class PaginaController {
     }
 
     @GetMapping("/rotina")
-    public String rotina(@RequestParam(required = false) String data, Model model) {
+    public String rotina(@RequestParam(required = false) String data, Model model, HttpServletResponse response) {
+        semCache(response);
         LocalDate selecionada = (data == null || data.isBlank()) ? LocalDate.now() : LocalDate.parse(data);
+        model.addAttribute("pagina", "rotina");
         model.addAttribute("atividades", atividadeService.listarPorData(selecionada));
         model.addAttribute("dataSelecionada", selecionada);
         model.addAttribute("novaAtividade", new AtividadeEstudoModel());
@@ -63,7 +68,14 @@ public class PaginaController {
     }
 
     @GetMapping("/tempo")
-    public String tempo() {
+    public String tempo(Model model) {
+        model.addAttribute("pagina", "tempo");
         return "tempo";
+    }
+
+    private void semCache(HttpServletResponse response) {
+        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
     }
 }
